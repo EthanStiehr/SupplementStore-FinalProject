@@ -25,6 +25,7 @@
 
         <!-- Invoice Settings -->
         <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+            <Button x:Name="btnNewInv"  Content="New Invoice"  Click="btnNewInv_Click"/>
             <Button x:Name="btnEditInv" Content="Edit Invoice" Click="btnEditInv_Click"/>
             <Button x:Name="btnSaveInv" Content="Save Invoice" Click="btnSaveInv_Click"/>
         </WrapPanel>
@@ -43,10 +44,10 @@
                 <TextBox x:Name="txtInvDate"/>
 
                 <Label Content="Invoice Number:"/>
-                <TextBox x:Name="txtInvNumber"/>
+                <TextBox x:Name="txtInvNumber" IsEnabled="False"/>
 
                 <Label Content="Total Cost:"/>
-                <TextBox x:Name="txtInvCost"/>
+                <TextBox x:Name="txtInvCost" IsEnabled="False"/>
 
                 <!-- Item Settings -->
                 <Grid>
@@ -61,14 +62,14 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,15,0">
                     <Label Content="Items:"/>
-                    <ComboBox x:Name="cmbItems"/>
+                    <ComboBox x:Name="cmbItems" SelectionChanged="cmbItemsChanged"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="0,30,15,0">
                     <Button Content="Add Item" Click="btnAddItem_Click"/>
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,15,0">
                     <Label Content="Cost:"/>
-                    <TextBox x:Name="txtItemCost"/>
+                    <TextBox x:Name="txtItemCost" IsEnabled="False"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,0,15,0">
                     <Button Content="Remove Item" Click="btnRemoveItem_Click"/>

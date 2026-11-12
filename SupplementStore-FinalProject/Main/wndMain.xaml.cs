@@ -21,12 +21,18 @@ namespace SupplementStore_FinalProject
     {
         //wndSearch wndSearch;
         wndItems wndItems;
+        clsMainLogic mainLogic;
+
+        private bool isNewInv = false;
         public wndMain()
         {
             InitializeComponent();
 
             //wndSearch = new wndSearch();
             wndItems = new wndItems();
+            mainLogic = new clsMainLogic();
+
+            PopulateItemsComboBox();
         }
 
         ////////////////////////////////////////////////////////////
@@ -37,7 +43,7 @@ namespace SupplementStore_FinalProject
             // Open the search window
             //wndSearch.ShowDialog();
 
-            RefreshItemsComboBox();
+            PopulateItemsComboBox();
         }
 
         public void btnItems_Click(object sender, RoutedEventArgs e)
@@ -45,7 +51,7 @@ namespace SupplementStore_FinalProject
             // Open the items window
             wndItems.ShowDialog();
 
-            RefreshItemsComboBox();
+            PopulateItemsComboBox();
         }
         ////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////
@@ -54,6 +60,27 @@ namespace SupplementStore_FinalProject
         ////////////////////////////////////////////////////////////
         ///////////////////// INVOICE SETTINGS /////////////////////
         ////////////////////////////////////////////////////////////
+        /// <summary>
+        /// Handles the click event for the new invoice button.
+        /// Creates a new invoice and enables the input fields for editing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void btnNewInv_Click(object sender, RoutedEventArgs e)
+        {
+            // Update the UI to reflect the new invoice
+            txtInvNumber.Text = "TBD";
+            txtInvCost.Text = "0.00";
+            grpMain.IsEnabled = true;
+            isNewInv = true;
+        }
+
+        /// <summary>
+        /// Handles the click event for the edit invoice button.
+        /// Allows edit to the invoice details by enabling the input fields.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void btnEditInv_Click(object sender, RoutedEventArgs e)
         {
             grpMain.IsEnabled = true;
@@ -61,8 +88,16 @@ namespace SupplementStore_FinalProject
 
         public void btnSaveInv_Click(object sender, RoutedEventArgs e)
         {
-            // Save the invoice details to database
-
+            // Untested
+            if(isNewInv)
+            {
+                mainLogic.CreateNewInvoice(txtInvDate.Text, txtInvCost.Text);
+                isNewInv = false;
+            }
+            else
+            {
+                mainLogic.UpdateInvoiceDetails(txtInvNumber.Text, txtInvDate.Text, txtInvCost.Text);
+            }
             grpMain.IsEnabled = false;
         }
         ////////////////////////////////////////////////////////////
@@ -72,14 +107,29 @@ namespace SupplementStore_FinalProject
         ////////////////////////////////////////////////////////////
         ////////////////////// ITEM SETTINGS ///////////////////////
         ////////////////////////////////////////////////////////////
+        public void cmbItemsChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbItems.SelectedItem != null)
+            {
+                //string itemDescription = cmbItems.SelectedItem.ToString();
+                //string itemCode = mainLogic.GetItemCode(itemDescription); ///////// KEEPS CRASHING HERE
+                //string itemCost = mainLogic.GetItemCost(itemCode);
+                //txtItemCost.Text = itemCost;
+            }
+        }
+
         public void btnAddItem_Click(object sender, RoutedEventArgs e)
         {
-            // Adding item to database
+            // Untested
+            mainLogic.AddInvoiceItem(txtInvNumber.Text, mainLogic.GetItemCode(cmbItems.SelectedItem.ToString()), txtItemCost.Text);
+            txtInvCost.Text = mainLogic.UpdateTotalCost(txtInvCost.Text, txtItemCost.Text, true);
         }
 
         public void btnRemoveItem_Click(object sender, RoutedEventArgs e)
         {
-            // Remove item from database
+            // Untested
+            mainLogic.RemoveInvoiceItem(txtInvNumber.Text, mainLogic.GetItemCode(cmbItems.SelectedItem.ToString()));
+            txtInvCost.Text = mainLogic.UpdateTotalCost(txtInvCost.Text, txtItemCost.Text, false);
         }
         ////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////
@@ -88,9 +138,33 @@ namespace SupplementStore_FinalProject
         ////////////////////////////////////////////////////////////
         //////////////////// PRIVATE FUNCTIONS /////////////////////
         ////////////////////////////////////////////////////////////
-        private void RefreshItemsComboBox()
+        /// <summary>
+        /// Populates the items combo box with all available items from the database.
+        /// </summary>
+        private void PopulateItemsComboBox()
         {
-            // Reload the Items from the Database
+            cmbItems.Items.Clear();
+
+            string items = mainLogic.GetAllItems();
+            for (int i = 0; i < items.Split('\n').Length - 1; i++)
+            {
+                cmbItems.Items.Add(items.Split('\n')[i]);
+            }
+
+        }
+
+        public void PopulateInvoiceDetails(string invoiceNum)
+        {
+            // This function will retrieve the invoice number from the search
+            // window and populate the main window with the invoice details.
+            // Understanding of how the search window works in needed before
+            // this function can be implemented.
+
+            //string details = mainLogic.GetInvoice(invoiceNum);
+            //for (int i = 0; i < details.Split('\n').Length - 1; i++)
+            //{
+            //    // parses the details and populates the UI fields accordingly
+            //}
         }
 
         // Must have comments about how after the search window
@@ -99,21 +173,11 @@ namespace SupplementStore_FinalProject
         // that describes how the items combo box will be refreshed
         // if any items are modified/added on the items window.
 
-        // should allow the user to create new invoices or edit
-        // existing invoices.  There should be just one window for
-        // all functionality of the main window.  So, the main window
-        // will NOT open other windows to add/edit invoices.  It will
-        // also have a menu (at the top, use a menu control) that will
-        // have two functionalities.  The first will allow the user to
-        // update a def table that contains the items.  The next will
-        // be to open a search screen used to search for invoices.
+        // should allow the user to create new invoices.
 
-        // If a new invoice is created the user may enter data
-        // pertaining to that invoice.Since an auto-generated number
-        // is used in the database for the invoice number, when a user
-        // creates a new invoice, just display “TBD” for the Invoice
-        // Number.An invoice date will also be assigned by the user.
-        // Next different items will be entered by the user.The items
+        // If a new invoice is created.
+        // An invoice date will be assigned by the user.
+        // Different items will be entered by the user.The items
         // will be selected from a drop-down box and the cost for that
         // item will be put into a read only textbox.  This will be
         // the default cost of an item. Once the item is selected,
@@ -162,5 +226,6 @@ namespace SupplementStore_FinalProject
         should display it in a read only mode, then an edit button needs 
         to be clicked to edit it.
         */
+
     }
 }
