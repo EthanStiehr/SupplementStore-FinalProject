@@ -1,4 +1,5 @@
 using SupplementStore_FinalProject.Items;
+using SupplementStore_FinalProject.Search;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +20,7 @@ namespace SupplementStore_FinalProject
     /// </summary>
     public partial class wndMain : Window
     {
-        //wndSearch wndSearch;
+        wndSearch wndSearch;
         wndItems wndItems;
         clsMainLogic mainLogic;
 
@@ -28,7 +29,7 @@ namespace SupplementStore_FinalProject
         {
             InitializeComponent();
 
-            //wndSearch = new wndSearch();
+            wndSearch = new wndSearch();
             wndItems = new wndItems();
             mainLogic = new clsMainLogic();
 
@@ -41,7 +42,7 @@ namespace SupplementStore_FinalProject
         public void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             // Open the search window
-            //wndSearch.ShowDialog();
+            wndSearch.ShowDialog();
 
             PopulateItemsComboBox();
         }
