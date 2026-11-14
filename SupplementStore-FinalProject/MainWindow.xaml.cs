@@ -16,9 +16,16 @@ namespace SupplementStore_FinalProject
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        wndMain wndMain;
+
         public MainWindow()
         {
             InitializeComponent();
+            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+            wndMain = new wndMain();
+            wndMain.Show();
         }
     }
 }
