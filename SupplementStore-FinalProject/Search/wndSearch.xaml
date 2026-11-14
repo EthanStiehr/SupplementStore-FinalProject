@@ -1,0 +1,86 @@
+﻿<Window x:Name="wndSearch1" x:Class="SupplementStore_FinalProject.Search.wndSearch"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Search Invoices"
+        Height="500"
+        Width="750"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0"
+                   Text="Search Invoices"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,15"/>
+
+        <!-- Filters -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="5">
+                <TextBlock Text="Invoice Number"/>
+                <ComboBox x:Name="cboInvoiceNum"
+                          Height="30"
+                          SelectionChanged="Filter_SelectionChanged"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Margin="5">
+                <TextBlock Text="Invoice Date"/>
+                <ComboBox x:Name="cboInvoiceDate"
+                          Height="30"
+                          SelectionChanged="Filter_SelectionChanged"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Margin="5">
+                <TextBlock Text="Total Cost"/>
+                <ComboBox x:Name="cboTotalCost"
+                          Height="30"
+                          SelectionChanged="Filter_SelectionChanged"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Invoice Results -->
+        <DataGrid x:Name="dgInvoices"
+                  Grid.Row="2"
+                  AutoGenerateColumns="True"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  Margin="5"/>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="5,15,5,0">
+
+            <Button x:Name="btnSelect"
+                    Content="Select"
+                    Width="100"
+                    Height="35"
+                    Margin="5"
+                    IsDefault="True"
+                    Click="btnSelect_Click"/>
+
+            <Button x:Name="btnCancel"
+                    Content="Cancel"
+                    Width="100"
+                    Height="35"
+                    Margin="5"
+                    IsCancel="True"
+                    Click="btnCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
